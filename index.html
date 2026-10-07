@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teclar e Clicar</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#f7fbff,#eef7ff);
+  color:#1f2937;
+}
+.app{
+  width:min(860px,96%);
+  margin:12px auto 10px;
+}
+.header{
+  text-align:center;
+  margin-bottom:10px;
+}
+.keyboard-art{
+  width:min(420px,88%);
+  margin:0 auto 8px;
+  background:#ffffff;
+  border:2px solid #dbeafe;
+  border-radius:18px;
+  padding:10px 12px;
+  box-shadow:0 6px 16px rgba(15,23,42,.06);
+}
+.keyboard-row{
+  display:flex;
+  gap:5px;
+  justify-content:center;
+  margin:4px 0;
+}
+.key{
+  height:28px;
+  min-width:28px;
+  padding:0 7px;
+  border-radius:7px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.10);
+}
+.k1{background:#0ea5e9}.k2{background:#8b5cf6}.k3{background:#f59e0b}.k4{background:#10b981}.k5{background:#ef4444}.k6{background:#ec4899}
+.key.wide{min-width:46px}.key.space{min-width:150px}
+h1{
+  margin:0;
+  font-size:clamp(28px,4.2vw,42px);
+  color:#155e75;
+}
+.subtitle{
+  margin-top:4px;
+  font-size:16px;
+  color:#475569;
+}
+.topbar{
+  display:grid;
+  grid-template-columns:1fr auto auto;
+  gap:8px;
+  align-items:center;
+  background:#fff;
+  border:2px solid #dbeafe;
+  border-radius:16px;
+  padding:9px 12px;
+  margin-bottom:10px;
+}
+.progress-wrap{min-width:0}
+.progress-label{
+  font-weight:bold;
+  margin-bottom:5px;
+  font-size:14px;
+}
+.progress{
+  height:11px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#e2e8f0;
+}
+.progress>div{
+  height:100%;
+  width:0;
+  background:#38bdf8;
+  transition:width .25s ease;
+}
+.score,.question-number{
+  background:#f8fafc;
+  border:2px solid #e2e8f0;
+  border-radius:12px;
+  padding:7px 10px;
+  font-weight:bold;
+  white-space:nowrap;
+  font-size:14px;
+}
+.card{
+  background:#fff;
+  border:2px solid #cfe8ff;
+  border-radius:20px;
+  padding:18px 22px;
+  box-shadow:0 8px 20px rgba(15,23,42,.05);
+}
+.mission{
+  display:inline-block;
+  padding:5px 11px;
+  border-radius:999px;
+  background:#e0f2fe;
+  color:#075985;
+  font-weight:bold;
+  margin-bottom:9px;
+  font-size:14px;
+}
+.prompt-title{
+  margin:0 0 8px;
+  font-size:18px;
+}
+.question{
+  font-size:clamp(24px,3.4vw,32px);
+  font-weight:800;
+  line-height:1.2;
+  padding:14px;
+  background:#fffbeb;
+  border:2px solid #fde68a;
+  border-radius:15px;
+  text-align:center;
+  margin-bottom:14px;
+}
+label{
+  display:block;
+  font-size:16px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+input{
+  width:100%;
+  font-size:21px;
+  padding:11px 14px;
+  border:3px solid #cbd5e1;
+  border-radius:14px;
+  outline:none;
+}
+input:focus{
+  border-color:#38bdf8;
+  box-shadow:0 0 0 4px rgba(56,189,248,.18);
+}
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:11px;
+}
+button{
+  border:0;
+  border-radius:12px;
+  padding:10px 16px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+#checkBtn{background:#0284c7;color:white}
+#nextBtn{background:#16a34a;color:white;display:none}
+#restartBtn{background:#7c3aed;color:white;display:none}
+#clearBtn{background:#e2e8f0;color:#1f2937}
+.feedback{
+  min-height:0;
+  margin-top:11px;
+  border-radius:14px;
+  padding:10px 13px;
+  font-size:17px;
+  font-weight:bold;
+  display:none;
+}
+.feedback.ok{display:block;background:#dcfce7;color:#166534;border:2px solid #86efac}
+.feedback.bad{display:block;background:#fee2e2;color:#991b1b;border:2px solid #fca5a5}
+.feedback.info{display:block;background:#e0f2fe;color:#075985;border:2px solid #7dd3fc}
+.small-note{
+  margin-top:8px;
+  color:#64748b;
+  font-size:12px;
+}
+.final{text-align:center;display:none}
+.final h2{font-size:32px;margin-bottom:6px;color:#166534}
+.final-score{font-size:24px;font-weight:bold;margin:14px 0}
+.stars{font-size:36px;letter-spacing:4px}
+.footer{
+  text-align:center;
+  margin-top:9px;
+  font-size:13px;
+  color:#64748b;
+}
+.footer strong{color:#334155}
+@media(max-width:650px){
+  .app{width:96%;margin:8px auto}
+  .keyboard-art{width:94%;padding:8px}
+  .key{height:24px;min-width:24px;font-size:10px;padding:0 5px}
+  .key.wide{min-width:38px}.key.space{min-width:105px}
+  .topbar{grid-template-columns:1fr 1fr}
+  .progress-wrap{grid-column:1/-1}
+  .score,.question-number{text-align:center}
+  .card{padding:16px}
+}
+@media(max-height:800px) and (min-width:700px){
+  .app{margin:8px auto}
+  .keyboard-art{padding:7px 10px;margin-bottom:5px}
+  .key{height:24px}
+  h1{font-size:32px}
+  .subtitle{font-size:14px}
+  .topbar{padding:7px 10px;margin-bottom:7px}
+  .card{padding:14px 18px}
+  .question{padding:10px;margin-bottom:10px;font-size:27px}
+  input{padding:9px 12px}
+  .buttons{margin-top:8px}
+  .small-note{margin-top:6px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+<div class="keyboard-art" aria-label="Ilustração de um teclado colorido">
+  <div class="keyboard-row">
+    <div class="key k1">Q</div><div class="key k2">W</div><div class="key k3">E</div><div class="key k4">R</div><div class="key k5">T</div><div class="key k6">Y</div><div class="key k1">U</div><div class="key k2">I</div><div class="key k3">O</div><div class="key k4">P</div>
+  </div>
+  <div class="keyboard-row">
+    <div class="key k2">A</div><div class="key k3">S</div><div class="key k4">D</div><div class="key k5">F</div><div class="key k6">G</div><div class="key k1">H</div><div class="key k2">J</div><div class="key k3">K</div><div class="key k4">L</div>
+  </div>
+  <div class="keyboard-row">
+    <div class="key wide k5">Shift</div><div class="key k6">Z</div><div class="key k1">X</div><div class="key k2">C</div><div class="key k3">V</div><div class="key k4">B</div><div class="key k5">N</div><div class="key k6">M</div><div class="key wide k1">Enter</div>
+  </div>
+  <div class="keyboard-row">
+    <div class="key wide k3">Ctrl</div><div class="key wide k4">Alt</div><div class="key space k1">ESPAÇO</div><div class="key wide k2">Alt</div>
+  </div>
+</div>
+<h1>Teclar e Clicar</h1>
+<div class="subtitle">Aprende a escrever no computador</div>
+</div>
+<div class="topbar"><div class="progress-wrap"><div class="progress-label">Progresso</div><div class="progress"><div id="progressBar"></div></div></div><div class="question-number" id="questionNumber">Pergunta 1 / 14</div><div class="score">⭐ Pontos: <span id="score">0</span></div></div>
+<div class="card"><div id="gameArea"><div class="mission" id="mission">Missão 1 — Palavras</div><h2 class="prompt-title">Escreve exatamente o que aparece:</h2><div class="question" id="questionText">gato</div><label for="answer">A tua resposta:</label><input id="answer" type="text" autocomplete="off" spellcheck="false" placeholder="Escreve aqui..."><div class="buttons"><button id="checkBtn">✓ Verificar</button><button id="clearBtn">Limpar</button><button id="nextBtn">Seguinte →</button></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="small-note">Podes carregar na tecla Enter para verificar.</div></div><div class="final" id="finalArea"><div class="stars" id="stars">⭐⭐⭐</div><h2>Parabéns!</h2><p>Terminaste todas as missões.</p><div class="final-score">Pontuação: <span id="finalScore">0</span> / <span id="maxScore">140</span></div><p id="finalMessage"></p><button id="restartBtn">↻ Jogar novamente</button></div></div>
+</div><div class="footer">Professor <strong>António João Lopes</strong></div>
+<script>
+const exercises=[
+{mission:'Missão 1 — Palavras',text:'gato',answer:'gato'},{mission:'Missão 1 — Palavras',text:'casa',answer:'casa'},{mission:'Missão 1 — Palavras',text:'escola',answer:'escola'},
+{mission:'Missão 2 — Espaços',text:'o gato',answer:'o gato'},{mission:'Missão 2 — Espaços',text:'a bola azul',answer:'a bola azul'},
+{mission:'Missão 3 — Maiúsculas',text:'Ana',answer:'Ana'},{mission:'Missão 3 — Maiúsculas',text:'Esmoriz',answer:'Esmoriz'},
+{mission:'Missão 4 — Acentos',text:'avó',answer:'avó'},{mission:'Missão 4 — Acentos',text:'mãe',answer:'mãe'},{mission:'Missão 4 — Acentos',text:'pão',answer:'pão'},
+{mission:'Missão 5 — Pontuação',text:'Olá!',answer:'Olá!'},{mission:'Missão 5 — Pontuação',text:'Como te chamas?',answer:'Como te chamas?'},
+{mission:'Missão 6 — Frases',text:'O gato é preto.',answer:'O gato é preto.'},{mission:'Missão 6 — Frases',text:'A Ana tem uma bola.',answer:'A Ana tem uma bola.'}
+];
+let current=0,score=0,attempts=0,answered=false;const q=document.getElementById('questionText'),m=document.getElementById('mission'),a=document.getElementById('answer'),f=document.getElementById('feedback'),s=document.getElementById('score'),qn=document.getElementById('questionNumber'),pb=document.getElementById('progressBar'),check=document.getElementById('checkBtn'),next=document.getElementById('nextBtn'),clear=document.getElementById('clearBtn'),ga=document.getElementById('gameArea'),fa=document.getElementById('finalArea'),fs=document.getElementById('finalScore'),mx=document.getElementById('maxScore'),fm=document.getElementById('finalMessage'),rr=document.getElementById('restartBtn'),stars=document.getElementById('stars');mx.textContent=exercises.length*10;
+function norm(t){return t.trim().replace(/\s+/g,' ')}
+function load(){const ex=exercises[current];m.textContent=ex.mission;q.textContent=ex.text;a.value='';a.disabled=false;answered=false;attempts=0;f.className='feedback';f.textContent='';check.style.display='inline-block';next.style.display='none';qn.textContent=`Pergunta ${current+1} / ${exercises.length}`;pb.style.width=`${current/exercises.length*100}%`;a.focus()}
+function verify(){if(answered)return;const typed=norm(a.value),correct=norm(exercises[current].answer);if(!typed){f.className='feedback info';f.textContent='Escreve primeiro a tua resposta.';a.focus();return}attempts++;if(typed===correct){answered=true;let pts=10;if(attempts===2)pts=7;if(attempts>=3)pts=5;score+=pts;s.textContent=score;f.className='feedback ok';f.textContent=`Muito bem! ✓ Ganhaste ${pts} pontos.`;a.disabled=true;check.style.display='none';next.style.display='inline-block';pb.style.width=`${(current+1)/exercises.length*100}%`;next.focus()}else{f.className='feedback bad';f.textContent=attempts===1?'Ainda não está correto. Tenta outra vez.':'Quase! Observa bem letras, espaços, acentos e pontuação.';a.focus();a.select()}}
+function goNext(){if(!answered)return;current++;if(current>=exercises.length)finish();else load()}
+function finish(){ga.style.display='none';fa.style.display='block';fs.textContent=score;rr.style.display='inline-block';pb.style.width='100%';qn.textContent='Concluído!';const pct=Math.round(score/(exercises.length*10)*100);if(pct>=90){stars.textContent='⭐⭐⭐';fm.textContent='Excelente! Já estás a dominar o teclado.'}else if(pct>=70){stars.textContent='⭐⭐';fm.textContent='Muito bem! Continua a praticar.'}else{stars.textContent='⭐';fm.textContent='Bom trabalho! Com mais treino vais melhorar.'}}
+function restart(){current=0;score=0;s.textContent='0';ga.style.display='block';fa.style.display='none';rr.style.display='none';load()}
+check.addEventListener('click',verify);next.addEventListener('click',goNext);clear.addEventListener('click',()=>{if(answered)return;a.value='';f.className='feedback';f.textContent='';a.focus()});rr.addEventListener('click',restart);a.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();answered?goNext():verify()}});load();
+</script>
+</body>
+</html>
